@@ -1,0 +1,17 @@
+--- rutorrent/php/rtorrent.php	2013-04-16 08:10:11.000000000 -0400
++++ rutorrent/php/rtorrent.php	2013-10-10 11:04:51.666984040 -0400
+@@ -27,12 +27,11 @@
+ 				if(isset($torrent->{'rtorrent'}))
+ 					unset($torrent->{'rtorrent'});
+ 			}
+-			$raw_value = base64_encode($torrent->__toString());
+ 			$filename = is_object($fname) ? $torrent->getFileName() : $fname;
+-			if((strlen($raw_value)<self::RTORRENT_PACKET_LIMIT) || is_null($filename) || !isLocalMode())
++			if(is_null($filename) || !isLocalMode())
+ 			{
+ 				$cmd = new rXMLRPCCommand( $isStart ? 'load_raw_start' : 'load_raw' );
+-				$cmd->addParameter($raw_value,"base64");
++				$cmd->addParameter($torrent->__toString(),"base64");
+ 				if(!is_null($filename) && !$saveTorrent)
+ 					@unlink($filename);
+ 			}
